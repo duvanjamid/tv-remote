@@ -11,6 +11,12 @@ Four TV "backends" live side by side behind one UI:
 | `adb/` | Any generic Android TV box (no SSAP, no certified remote service) | Wireless ADB — pairs with the box's own ADB keypair and sends `input keyevent` shell commands, via the pure-JVM [`dadb`](https://github.com/mobile-dev-inc/dadb) client (no PC, no root required) |
 | `bluetooth/` | Fallback when the TV isn't reachable over the network | Bluetooth HID — the phone advertises itself as a keyboard/consumer-control HID device and the TV pairs with it like any other remote |
 
+## Screenshots
+
+| Device list & discovery | Control | Apps | Inputs |
+|---|---|---|---|
+| ![Device list with the Jarvis orb](screenshots/device-list.png) | ![D-pad control screen](screenshots/control.png) | ![Apps grid pulled live from the TV](screenshots/apps.png) | ![Inputs tab](screenshots/inputs.png) |
+
 ## Discovery
 
 `discovery/` finds TVs on the LAN automatically: SSDP for webOS/UPnP devices and mDNS/NSD for Android TV's `_androidtvremote2._tcp` service. The device list screen shows results live behind an animated wireframe sphere ("Jarvis orb" — `ui/discovery/JarvisOrb.kt`) while a scan is in progress.
@@ -37,6 +43,8 @@ gradle installDebug
 
 No signing config, backend keys, or server setup needed — everything runs from the APK.
 
+Don't want to build it yourself? Every merge to `main` publishes a new [GitHub Release](https://github.com/duvanjamid/tv-remote/releases) with a downloadable APK (and AAB) attached — grab the latest one and `adb install` it, or sideload it directly.
+
 ## Project layout
 
 ```
@@ -49,3 +57,7 @@ app/src/main/java/com/proyectos/tvremote/
 ├── storage/      # Preferences / cached device persistence
 └── ui/           # Compose screens, shared controls, theme, Jarvis orb
 ```
+
+## Contributing
+
+PRs welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow (branch, PR, review, CI build check). Found a bug or have a feature idea? [Open an issue](https://github.com/duvanjamid/tv-remote/issues/new/choose).

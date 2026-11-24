@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest an idea for this project
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem?
+      description: What are you trying to do that the app doesn't support today?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Which backend would this affect?
+      options:
+        - LG webOS
+        - Android TV (certified, Remote Service v2)
+        - Generic Android TV box (ADB mode)
+        - Bluetooth HID
+        - Discovery / device list
+        - New backend / other

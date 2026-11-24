@@ -14,8 +14,9 @@ android {
         applicationId = "com.proyectos.tvremote"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        // Overridden by CI on release builds: -PappVersionCode=N -PappVersionName=X.Y.Z
+        versionCode = (project.findProperty("appVersionCode") as String?)?.toIntOrNull() ?: 1
+        versionName = (project.findProperty("appVersionName") as String?) ?: "1.0-dev"
     }
 
     buildTypes {

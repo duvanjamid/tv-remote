@@ -1,0 +1,38 @@
+name: Bug report
+description: Something doesn't work right
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you expected vs. what actually happened.
+    validations:
+      required: true
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Which backend?
+      options:
+        - LG webOS
+        - Android TV (certified, Remote Service v2)
+        - Generic Android TV box (ADB mode)
+        - Bluetooth HID
+        - Discovery / device list
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: TV / box model
+      description: e.g. "LG C4", "Chromecast with Google TV", "generic Allwinner box"
+  - type: input
+    id: phone
+    attributes:
+      label: Phone + Android version
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logcat / stack trace (if any)
+      render: shell

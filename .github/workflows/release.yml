@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Install Android SDK platform + build-tools
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Compute version
+        id: version
+        run: |
+          echo "name=1.0.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          echo "code=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+
+      - name: Build debug APK + AAB
+        run: |
+          gradle assembleDebug bundleDebug --stacktrace \
+            -PappVersionName=${{ steps.version.outputs.name }} \
+            -PappVersionCode=${{ steps.version.outputs.code }}
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/app-debug.apk "dist/tv-remote-${{ steps.version.outputs.name }}.apk"
+          cp app/build/outputs/bundle/debug/app-debug.aab "dist/tv-remote-${{ steps.version.outputs.name }}.aab"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.version.outputs.name }}" \
+            dist/tv-remote-${{ steps.version.outputs.name }}.apk \
+            dist/tv-remote-${{ steps.version.outputs.name }}.aab \
+            --title "v${{ steps.version.outputs.name }}" \
+            --generate-notes \
+            --notes "Debug-signed build (auto-generated Android debug keystore) — not Play-Store-signed. APK installs directly via \`adb install\` or sideloading; AAB included for completeness."
