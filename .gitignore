@@ -1,0 +1,24 @@
+# Gradle / Android build output
+.gradle/
+build/
+app/build/
+app/release/
+*.apk
+*.aab
+
+# Local machine config (SDK paths, etc.)
+local.properties
+
+# Signing
+*.jks
+*.keystore
+keystore.properties
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Firmware/ROM backups for a different in-progress project (TV box partition
+# dumps) - large binaries, not part of this app's source
+tvbox-backup-*/
